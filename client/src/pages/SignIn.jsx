@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {Alert, Button, Label, Spinner, TextInput} from "flowbite-react";
+import {useDispatch, useSelector} from "react-redux";
+import {signInFailure, signInStart, signInSuccess} from "../redux/user/userSlice.js";
 
 const SignIn = () => {
     const [formData, setFormData] = useState({
-        username: '', email: '', password: '' });
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [loading,setLoading]=useState(false)
-    const navigate=useNavigate()
+        email: '', password: ''
+    });
+    const {errorMessage,loading}=useSelector((state) => state.user);
+    const navigate = useNavigate()
+    const dispatch =useDispatch();
     const handleChange = (e) => {
         e.preventDefault();
         setFormData({...formData, [e.target.id]: e.target.value.trim()});
@@ -15,30 +18,29 @@ const SignIn = () => {
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!formData.email || !formData.password ) {
-            return setErrorMessage('please fill out all fields')
+        if (!formData.email || !formData.password) {
+           return  dispatch(signInFailure('all fields are required'))
         }
 
         try {
-            setLoading(true)
-            setErrorMessage(null)
+            dispatch(signInStart())
             const res = await fetch('/api/auth/sign-in', {
                 method: "POST",
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(formData),
             });
 
             const data = await res.json();
-            if (data.success===false) {
-                return setErrorMessage(data.message);
+            if (data.success === false) {
+                dispatch(signInFailure(data.message))
             }
-            setLoading(false)
-            if (res.ok){
+
+            if (res.ok) {
+                dispatch(signInSuccess(data))
                 navigate('/home')
             }
         } catch (error) {
-            setErrorMessage(error.message)
-            setLoading(false)
+           dispatch(signInFailure(error.message))
         }
     };
     return (
@@ -56,7 +58,7 @@ const SignIn = () => {
                 </div>
                 {/*right side*/}
                 <div className="flex-1">
-                    <form onSubmit={handleSubmit} className='flex flex-col gap-4' >
+                    <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                         <div>
                             <Label value='your email'/>
                             <TextInput
@@ -76,7 +78,7 @@ const SignIn = () => {
                             />
                         </div>
                         <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>
-                            {loading ?(
+                            {loading ? (
                                 <>
                                     <Spinner size='sm'/>
                                     <span className='pl-3'>Loading</span>
