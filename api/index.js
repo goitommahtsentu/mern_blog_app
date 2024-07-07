@@ -18,9 +18,13 @@ mongoose.connect(process.env.MONGO_DB).then(() => {
     console.log(err);
 })
 
-app.listen(process.env.PORT, () => {
-    console.log("Server running on port 8000");
-})
+// app.listen(process.env.PORT || 8000, () => {
+//     console.log("Server running on port 8000");
+// })
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000!');
+});
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use((err, req, res, next) => {
