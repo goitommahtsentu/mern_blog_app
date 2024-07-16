@@ -5,13 +5,14 @@ import DashProfile from "../components/DashProfile.jsx";
 
 const Dashboard = () => {
     const location = useLocation();
-    const [tab, setTab] = useState('');
+    const [tab, setTab] = useState(' ');
 
     useEffect(() =>{
         const urlParams = new URLSearchParams(location.search);
         const tabFromUrl = urlParams.get('tab')
+
        if(tabFromUrl){
-           setTab(tab)
+           setTab(tabFromUrl)
        }
     }, [location.search])
     return (
@@ -21,7 +22,7 @@ const Dashboard = () => {
              <DashSidebar/>
          </div>
             {/*profile */}
-            {tab=== 'profile' && <DashProfile/>}
+            {tab === 'profile' && <DashProfile/>}
         </div>
     );
 };
