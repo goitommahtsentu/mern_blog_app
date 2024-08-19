@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import dotenv from "dotenv";
 import userRoute from "./routes/user.route.js";
 import authRoute from "./routes/auth.route.js";
-import postRoute from "./routes/post.route.js";
+import postRoutes from './routes/post.route.js';
 import cors from 'cors';
 import cookieParser from "cookie-parser";
 dotenv.config()
@@ -29,7 +29,7 @@ app.listen(3000, () => {
 });
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
-app.use("/api/post", postRoute);
+app.use('/api/post', postRoutes);
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal server error";
