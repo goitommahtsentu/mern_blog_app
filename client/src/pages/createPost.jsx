@@ -85,7 +85,11 @@ const CreatePost = () => {
                     <TextInput type="text" placeholder='Title' required id='title' clssName='flex-1'
                                onChange={(e) => setFormData({...formData, title: e.target.value})}
                     />
-                    <Select onchage={(e) => ({...formData, category: e.target.value})}>
+                    <Select
+                        onChange={(e) =>
+                            setFormData({ ...formData, category: e.target.value })
+                        }
+                    >
                         <option value="uncatrgorized">Select a Category</option>
                         <option value="javascript">MEARN STACK</option>
                         <option value="reactjs">AI</option>
