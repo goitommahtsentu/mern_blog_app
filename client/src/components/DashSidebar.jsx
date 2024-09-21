@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Sidebar} from "flowbite-react";
-import {HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiUser} from "react-icons/hi";
+import {HiAnnotation, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiUser} from "react-icons/hi";
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
 
@@ -26,14 +26,28 @@ const DashSidebar = () => {
                             </Sidebar.Item>
                         </Link>)}
 
-                    {currentUser.isAdmin &&
-                        ( <Link to='/dashboard/?tab=users' >
-                            <Sidebar.Item as='div'
-                                          active={tab==='users'}
-                                          icon={HiOutlineUserGroup} >
-                                Users
-                            </Sidebar.Item>
-                        </Link>)}
+                    {currentUser.isAdmin && (
+                        <>
+                            <Link to='/dashboard?tab=users'>
+                                <Sidebar.Item
+                                    active={tab === 'users'}
+                                    icon={HiOutlineUserGroup}
+                                    as='div'
+                                >
+                                    Users
+                                </Sidebar.Item>
+                            </Link>
+                            <Link to='/dashboard?tab=comments'>
+                                <Sidebar.Item
+                                    active={tab === 'comments'}
+                                    icon={HiAnnotation}
+                                    as='div'
+                                >
+                                    Comments
+                                </Sidebar.Item>
+                            </Link>
+                        </>
+                    )}
 
                     <Sidebar.Item icon={HiArrowSmRight} className='cursor-pointer'>
                         Sign out
