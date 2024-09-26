@@ -8,11 +8,12 @@ import postRoutes from './routes/post.route.js';
 import commentRoutes from './routes/coment.route.js'
 import cors from 'cors';
 import cookieParser from "cookie-parser";
+import path from 'path';
 dotenv.config()
 const app = express();
 app.use(cookieParser())
 
-
+const __dirname = path.resolve();
 app.use(express.json());
 app.use(cors());
 mongoose.connect(process.env.MONGO_DB).then(() => {
@@ -32,6 +33,12 @@ app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use('/api/post', postRoutes);
 app.use('/api/comment', commentRoutes);
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal server error";
